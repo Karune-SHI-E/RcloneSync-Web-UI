@@ -7,12 +7,19 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  /* 柔和蓝紫渐变背景 */
-  background: linear-gradient(135deg, #a8c0ff, #3f2b96);
+  /* 设置壁纸背景 */
+  background-image: url('https://api.rls.ovh/adaptive'); /* 替换为你的壁纸路径 */
+  background-size: cover; /* 使壁纸覆盖整个屏幕 */
+  background-position: center; /* 使壁纸居中 */
+  background-attachment: fixed; /* 使壁纸固定，不随滚动条滚动 */
   color: #333;
   padding: 20px;
   line-height: 1.6;
   min-height: 100vh;
+}
+
+section:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* 标题 */
@@ -22,20 +29,6 @@ h1 {
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 40px;
-}
-
-/* 容器和区块 */
-section {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-  padding: 25px 30px;
-  margin-bottom: 30px;
-  transition: box-shadow 0.3s ease;
-}
-
-section:hover {
-  box-shadow: 0 6px 16px rgb(0 0 0 / 0.15);
 }
 
 /* 子标题 */
@@ -57,31 +50,11 @@ label {
   color: #555;
 }
 
-/* 输入框、选择框、文本域 */
-input, select, textarea {
-  width: 100%;
-  padding: 10px 15px;
-  margin-top: 6px;
-  font-size: 16px;
-  border: 1.8px solid #ddd;
-  border-radius: 6px;
-  transition: border-color 0.25s ease;
-  color: #222;
-  font-family: inherit;
-  resize: vertical;
-  background-color: #fafafa;
-}
-
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #3498db;
   background-color: #fff;
-  box-shadow: 0 0 8px #3498dbaa;
-}
-
-/* 文本域高度 */
-textarea {
-  min-height: 280px;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
 }
 
 /* 按钮 */
@@ -101,7 +74,7 @@ button {
 
 button:hover:not(:disabled) {
   background-color: #2980b9;
-  box-shadow: 0 4px 10px rgb(41 128 185 / 0.4);
+  box-shadow: 0 4px 10px rgba(41, 128, 185, 0.4);
 }
 
 button:disabled {
@@ -112,7 +85,7 @@ button:disabled {
 
 /* 日志区域 */
 #log-area {
-  background-color: #222;
+  background-color: rgba(34, 34, 34, 0.5); /* 调整透明度为 0.5 */
   color: #0f0;
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
@@ -124,6 +97,37 @@ button:disabled {
   white-space: pre-wrap;
   word-break: break-word;
   user-select: text;
+}
+
+/* 容器和区块 */
+section {
+  background: rgba(255, 255, 255, 0.5); /* 调整透明度为 0.5 */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px 30px;
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+  backdrop-filter: blur(10px); /* 高斯模糊效果 */
+}
+
+/* 输入框、选择框、文本域 */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 15px;
+  margin-top: 6px;
+  font-size: 16px;
+  border: 1.8px solid #ddd;
+  border-radius: 6px;
+  transition: border-color 0.25s ease;
+  color: #222;
+  font-family: inherit;
+  resize: vertical;
+  background-color: rgba(255, 255, 255, 0.5); /* 调整透明度为 0.5 */
+}
+
+/* 文本域高度 */
+textarea {
+  min-height: 280px;
 }
 
 /* 远程列表 */
