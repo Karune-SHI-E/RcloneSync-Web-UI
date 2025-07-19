@@ -1,0 +1,184 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* 柔和蓝紫渐变背景 */
+  background: linear-gradient(135deg, #a8c0ff, #3f2b96);
+  color: #333;
+  padding: 20px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* 标题 */
+h1 {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+
+/* 容器和区块 */
+section {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+  padding: 25px 30px;
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+section:hover {
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.15);
+}
+
+/* 子标题 */
+h2, h3 {
+  color: #34495e;
+  font-weight: 600;
+  margin-bottom: 18px;
+  font-size: 22px;
+  border-left: 4px solid #3498db;
+  padding-left: 10px;
+}
+
+/* 标签 */
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #555;
+}
+
+/* 输入框、选择框、文本域 */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 15px;
+  margin-top: 6px;
+  font-size: 16px;
+  border: 1.8px solid #ddd;
+  border-radius: 6px;
+  transition: border-color 0.25s ease;
+  color: #222;
+  font-family: inherit;
+  resize: vertical;
+  background-color: #fafafa;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  background-color: #fff;
+  box-shadow: 0 0 8px #3498dbaa;
+}
+
+/* 文本域高度 */
+textarea {
+  min-height: 280px;
+}
+
+/* 按钮 */
+button {
+  background-color: #3498db;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 28px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+button:hover:not(:disabled) {
+  background-color: #2980b9;
+  box-shadow: 0 4px 10px rgb(41 128 185 / 0.4);
+}
+
+button:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 日志区域 */
+#log-area {
+  background-color: #222;
+  color: #0f0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+}
+
+/* 远程列表 */
+ul#remote-list {
+  padding-left: 20px;
+  list-style-type: disc;
+  color: #555;
+  font-size: 16px;
+}
+
+ul#remote-list li {
+  margin: 6px 0;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  body {
+    padding: 15px 10px;
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  h2, h3 {
+    font-size: 20px;
+  }
+
+  label {
+    font-size: 18px;
+  }
+
+  input, select, textarea {
+    font-size: 18px;
+    padding: 14px 16px;
+  }
+
+  textarea {
+    min-height: 320px;
+  }
+
+  button {
+    font-size: 18px;
+    padding: 16px;
+    width: 100%;
+  }
+
+  #log-area {
+    font-size: 16px;
+    max-height: 480px;
+  }
+
+  ul#remote-list {
+    font-size: 18px;
+  }
+}

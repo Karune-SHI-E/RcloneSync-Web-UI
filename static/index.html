@@ -1,0 +1,170 @@
+<h1>OneDrive助手</h1>
+
+<section>
+  <h2>远程账号</h2>
+  <ul id="remote-list">加载中...</ul>
+  <link rel="stylesheet" href="/style.css">
+</section>
+
+<h3>编辑 rclone.conf 配置</h3>
+<textarea id="conf-editor" rows="15" cols="80"></textarea><br />
+<button onclick="saveConf()">保存配置</button>
+
+<script>
+function loadConf() {
+  fetch('/api/conf')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('conf-editor').value = data.conf || ''
+    })
+}
+function saveConf() {
+  const conf = document.getElementById('conf-editor').value
+  fetch('/api/conf', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({conf})
+  }).then(res => res.json())
+    .then(data => alert(data.status === 'ok' ? '保存成功' : '保存失败'))
+}
+loadConf()
+</script>
+
+<section>
+  <h2>云对云操作</h2>
+  <label>源远程：
+    <select id="src-remote"></select>
+  </label><br/>
+  <label>源路径：
+    <input id="src-path" placeholder="留空表示根目录" />
+  </label><br/>
+  <label>目标远程：
+    <select id="dst-remote"></select>
+  </label><br/>
+  <label>目标路径：
+    <input id="dst-path" placeholder="留空表示根目录" />
+  </label><br/>
+  <label>操作模式：
+    <select id="mode">
+      <option value="copy">复制 (copy)</option>
+      <option value="sync">同步 (sync)</option>
+    </select>
+  </label><br/>
+  <button id="start-btn">开始任务</button>
+  <button id="stop-btn" disabled>停止任务</button>
+</section>
+
+<section>
+  <h2>任务日志</h2>
+  <pre id="log-area" style="height:300px;overflow:auto; background:#111; color:#0f0; padding:10px; border-radius:4px;"></pre>
+</section>
+
+<script>
+  const remoteListEl = document.getElementById('remote-list');
+  const srcRemoteEl = document.getElementById('src-remote');
+  const dstRemoteEl = document.getElementById('dst-remote');
+  const srcPathEl = document.getElementById('src-path');
+  const dstPathEl = document.getElementById('dst-path');
+  const modeEl = document.getElementById('mode');
+  const startBtn = document.getElementById('start-btn');
+  const stopBtn = document.getElementById('stop-btn');
+  const logArea = document.getElementById('log-area');
+
+  let pollingInterval = null;
+
+  async function fetchRemotes() {
+    const res = await fetch('/api/remotes');
+    const data = await res.json();
+    remoteListEl.textContent = '';
+    if (data.remotes.length === 0) {
+      remoteListEl.textContent = '暂无远程账号';
+      return;
+    }
+    data.remotes.forEach(r => {
+      const li = document.createElement('li');
+      li.textContent = r;
+      remoteListEl.appendChild(li);
+    });
+
+    // 填充下拉框
+    srcRemoteEl.innerHTML = '';
+    dstRemoteEl.innerHTML = '';
+    data.remotes.forEach(r => {
+      const option1 = document.createElement('option');
+      option1.value = r;
+      option1.textContent = r;
+      srcRemoteEl.appendChild(option1);
+
+      const option2 = document.createElement('option');
+      option2.value = r;
+      option2.textContent = r;
+      dstRemoteEl.appendChild(option2);
+    });
+  }
+
+  async function startTask() {
+    const src_remote = srcRemoteEl.value;
+    const src_path = srcPathEl.value.trim();
+    const dst_remote = dstRemoteEl.value;
+    const dst_path = dstPathEl.value.trim();
+    const mode = modeEl.value;
+
+    if (!src_remote || !dst_remote) {
+      alert('请先选择源和目标远程');
+      return;
+    }
+
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    logArea.textContent = '';
+
+    const res = await fetch('/api/transfer', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({src_remote, src_path, dst_remote, dst_path, mode})
+    });
+    const data = await res.json();
+
+    if (data.status !== 'ok') {
+      alert('启动任务失败: ' + data.message);
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      return;
+    }
+
+    pollLog();
+  }
+
+  async function stopTask() {
+    stopBtn.disabled = true;
+    const res = await fetch('/api/stop', {method: 'POST'});
+    const data = await res.json();
+    alert(data.message);
+    if(data.status === 'ok'){
+      clearInterval(pollingInterval);
+      startBtn.disabled = false;
+    } else {
+      stopBtn.disabled = false;
+    }
+  }
+
+  async function pollLog() {
+    pollingInterval = setInterval(async () => {
+      const res = await fetch('/api/log');
+      const data = await res.json();
+      if (data.log) {
+        logArea.textContent += data.log;
+        logArea.scrollTop = logArea.scrollHeight;
+      }
+      if (data.done) {
+        clearInterval(pollingInterval);
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      }
+    }, 1500);
+  }
+
+  window.onload = fetchRemotes;
+  startBtn.addEventListener('click', startTask);
+  stopBtn.addEventListener('click', stopTask);
+</script>
